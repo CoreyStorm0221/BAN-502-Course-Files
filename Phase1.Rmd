@@ -1,0 +1,76 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+
+# BAN 502 - Predictive Analytics
+## Storm, Corey
+### Project - Phase 1
+
+```{r}
+library(tidyverse)
+library(mice) #package for imputation
+library(VIM) #visualizing missingness
+library(lubridate)
+library(GGally)
+library(ggplot2)
+```
+
+Cleaning Data
+```{r}
+chicago <- read.csv("chicago2.csv")
+
+str(chicago)
+summary(chicago)
+
+#Missing Values
+chicago <- chicago %>%
+  drop_na()
+
+#Drop Columns
+chicago = chicago %>% select(-ID, -Case.Number, -Updated.On, -X.Coordinate, -Y.Coordinate, -Location)
+
+#Add Columns
+chicago = chicago %>% mutate(Date = mdy_hms(Date))
+chicago = chicago %>% mutate(Hour = hour(Date)) 
+chicago = chicago %>% mutate(Day = day(Date)) 
+chicago = chicago %>% mutate(Month = month(Date)) 
+
+#Modify Variables
+chicago =  chicago %>% mutate(Block = as.factor(Block)) %>%
+  mutate(IUCR = as.factor(IUCR)) %>% 
+  mutate(Primary.Type = as.factor(Primary.Type)) %>% 
+  mutate(Description = as.factor(Description)) %>% 
+  mutate(Location.Description = as.factor(Location.Description)) %>% 
+  mutate(Arrest = as.factor(Arrest)) %>% 
+  mutate(Domestic = as.factor(Domestic)) %>% 
+  mutate(Arrest = as.factor(Arrest)) %>% 
+  mutate(Beat = as.factor(Beat)) %>% 
+  mutate(District = as.factor(District)) %>% 
+  mutate(Ward = as.factor(Ward)) %>% 
+  mutate(Community.Area = as.factor(Community.Area)) %>% 
+  mutate(FBI.Code = as.factor(FBI.Code)) %>% 
+  mutate(Year = as.factor(Year)) %>% 
+  mutate(Latitude = as.factor(Latitude)) %>% 
+  mutate(Longitude = as.factor(Longitude)) %>% 
+  mutate(Hour = as.factor(Hour)) %>% 
+  mutate(Day = as.factor(Day)) %>% 
+  mutate(Month = as.factor(Month))
+
+str(chicago)
+```
+
+Arrests Data Visualizations
+```{r}
+ggplot(chicago) +
+  aes(x = Primary.Type, fill = Arrest) +
+  geom_bar()
+```
+
+
+
+
+
+
+
